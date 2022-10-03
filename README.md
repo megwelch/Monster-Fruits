@@ -1,3 +1,3 @@
 # MONSTER FRUITS!
 
-This is the full stack# Monster-Fruits
+This is the full stack app for sei-monster-mash
