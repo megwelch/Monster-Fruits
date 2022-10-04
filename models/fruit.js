@@ -1,9 +1,10 @@
 /////////////////////////////////////////////////
 // Our Schema and Model for the Fruit Resource
 /////////////////////////////////////////////////
-const mongoose = require("mongoose") // import mongoose
+// const mongoose = require("mongoose") // import mongoose
+const mongoose = require('./connection')
 
-// we;re going to pull the Schema and model from mongoose
+// we're going to pull the Schema and model from mongoose
 // we'll use a syntax called 'destructuring'
 const { Schema, model } = mongoose
 
