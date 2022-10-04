@@ -1,14 +1,14 @@
-
 /////////////////////////////////////////////
 // Import Our Dependencies
 /////////////////////////////////////////////
 require("dotenv").config() // Load ENV Variables
 const express = require("express") // import express
-const morgan = require("morgan") // import morgan
+
 // const mongoose = require("mongoose") // import mongoose
     //^^^ we don't need this dependency anymore because it lives in connection.js
 const path = require("path") // import path module
 const FruitRouter = require('./controllers/fruitControllers')
+const middleware = require('./utils/middleware')
 
 /////////////////////////////////////////////
 // Create Our Express Application Object
@@ -18,16 +18,19 @@ const FruitRouter = require('./controllers/fruitControllers')
 /////////////////////////////////////////////
 // Middleware
 /////////////////////////////////////////////
+// our middleware is now being passed through a function in the utils directory
+// the middleware function takes one argument, an app, and processes the middleware on that app
+middleware(app)
 // middleware runs before all the routes, every request to process through our middleware before mongoose does anything with it
 
-app.use(morgan('tiny')) 
-// ^^^ this is for request logging, the 'tiny' argument declares what size of morgan log to use
-app.use(express.urlencoded({ extended:true }))
-// ^^^ request bodies(useful for POST and PUT requests)
-app.use(express.static('public'))
-// ^^^ serve files from the public folder statically
-app.use(express.json())
-// ^^^ parses incoming request payloads with JSON
+// app.use(morgan('tiny')) 
+// // ^^^ this is for request logging, the 'tiny' argument declares what size of morgan log to use
+// app.use(express.urlencoded({ extended:true }))
+// // ^^^ request bodies(useful for POST and PUT requests)
+// app.use(express.static('public'))
+// // ^^^ serve files from the public folder statically
+// app.use(express.json())
+// // ^^^ parses incoming request payloads with JSON
 
 /////////////////////////////////////////////
 // Home Route
