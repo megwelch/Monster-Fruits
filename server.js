@@ -8,6 +8,7 @@ const express = require("express") // import express
     //^^^ we don't need this dependency anymore because it lives in connection.js
 const path = require("path") // import path module
 const FruitRouter = require('./controllers/fruitControllers')
+const UserRouter = require('./controllers/userControllers')
 const middleware = require('./utils/middleware')
 
 /////////////////////////////////////////////
@@ -21,16 +22,6 @@ const middleware = require('./utils/middleware')
 // our middleware is now being passed through a function in the utils directory
 // the middleware function takes one argument, an app, and processes the middleware on that app
 middleware(app)
-// middleware runs before all the routes, every request to process through our middleware before mongoose does anything with it
-
-// app.use(morgan('tiny')) 
-// // ^^^ this is for request logging, the 'tiny' argument declares what size of morgan log to use
-// app.use(express.urlencoded({ extended:true }))
-// // ^^^ request bodies(useful for POST and PUT requests)
-// app.use(express.static('public'))
-// // ^^^ serve files from the public folder statically
-// app.use(express.json())
-// // ^^^ parses incoming request payloads with JSON
 
 /////////////////////////////////////////////
 // Home Route
@@ -49,6 +40,7 @@ app.get("/", (req, res) => {
 // app.use, when we register a route needs 2 arguements
     // the first is the base url endpoint, the second is the file to use
 app.use('/fruits', FruitRouter)
+app.use('/users', UserRouter)
 
 /////////////////////////////////////////////
 // Server Listener
