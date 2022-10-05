@@ -112,14 +112,16 @@ router.delete("/:id", (req, res) => {
 // SHOW request
 // read route -> finds and displays a single resource
 router.get("/:id", (req, res) => {
-    // console.log("this is the request", req)
-    // in our index route, we want to use mongoose model methods to get our data
     const id = req.params.id
+
     Fruit.findById(id)
+        // populate will provide more data about the document that is in the specified collection
+        // the first arg is the field to populate
+        // the second can specify which parts to keep or which to remove
+        // .populate("owner", "username")
+        // we can also populate fields of our subdocuments
+        .populate("comments.author", "username")
         .then(fruit => {
-            // this is fine for initial testing
-            // res.send(fruits)
-            // this the preferred method for APIs
             res.json({ fruit: fruit })
         })
         .catch(err => console.log(err))
