@@ -15,7 +15,7 @@ const middleware = require('./utils/middleware')
 /////////////////////////////////////////////
 // Create Our Express Application Object
 /////////////////////////////////////////////
- const app = express()
+ const app = require('liquid-express-views')(express())
 
 /////////////////////////////////////////////
 // Middleware
@@ -29,9 +29,10 @@ middleware(app)
 /////////////////////////////////////////////
 
 app.get("/", (req, res) => {
-    res.send("Your server is running, better go out and catch it")
+    // res.send("Your server is running, better go out and catch it")
     // you can also send html as a string from res.send
     // res.send("<small style='color: red'>Your server is running, better go out and catch it</small>")
+    res.render('index.liquid')
 })
 
 /////////////////////////////////////////////

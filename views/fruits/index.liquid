@@ -1,0 +1,25 @@
+{% layout 'layout.liquid' %}
+{% block content %}
+    <div>
+        <h2 class="display-6">All Fruits</h2>
+        <div class="row">
+            {% for fruit in fruits %}
+                <div class="card">
+                    <h5 class="card-header">{{fruit.name}}</h5>
+                    <div class="card-body"></div>
+                        <h5 class="card-title">
+                            {% if fruit.readyToEat %}
+                                Ripe
+                            {% else %}
+                                Not Ripe
+                            {% endif %}
+                        </h5>
+                        <p class="card-text">The color of this {{fruit.name}} is {{fruit.color}}</p>
+                        <a class="btn btn-info" href="/fruits/{{fruit.id}}">
+                            View {{fruit.name}}
+                        </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
