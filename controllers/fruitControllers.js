@@ -43,6 +43,7 @@ router.get('/new', (req, res) => {
 
     res.render('fruits/new', { username, loggedIn, userId })
 })
+
 // POST request
 // create route -> gives the ability to create new fruits
 router.post("/", (req, res) => {
@@ -60,9 +61,13 @@ router.post("/", (req, res) => {
     // we'll use the mongoose model method `create` to make a new fruit
     Fruit.create(req.body)
         .then(fruit => {
+            const username = req.session.username
+            const loggedIn = req.session.loggedIn
+            const userId = req.session.userId
             // send the user a '201 created' response, along with the new fruit
             // res.status(201).json({ fruit: fruit.toObject() })
             res.redirect('/fruits')
+            // res.render('fruits/show', { fruit, username, loggedIn, userId })
         })
         .catch(err => res.redirect(`/error?error=${err}`))
 })
@@ -93,12 +98,13 @@ router.get("/edit/:id", (req, res) => {
     const userId = req.session.userId
 
     const fruitId = req.params.id
+
     Fruit.findById(fruitId)
         // render the edit form if there is a fruit
-        // redirect if there isn't
         .then(fruit => {
-            res.render('fruits/edit', {fruit, username, loggedIn, userId})
+            res.render('fruits/edit', { fruit, username, loggedIn, userId })
         })
+        // redirect if there isn't
         .catch(err => {
             res.redirect(`/error?error=${err}`)
         })
@@ -108,14 +114,14 @@ router.get("/edit/:id", (req, res) => {
 // PUT request
 // update route -> updates a specific fruit
 router.put("/:id", (req, res) => {
-    // console.log("I hit the update route", req.params.id)
+    console.log("req.body initially", req.body)
     const id = req.params.id
+
     req.body.readyToEat = req.body.readyToEat === 'on' ? true : false
+    console.log('req.body after changing checkbox value', req.body)
     Fruit.findById(id)
         .then(fruit => {
             if (fruit.owner == req.session.userId) {
-                // res.sendStatus(204)
-                // return fruit.updateOne(req.body)
                 // must return the results of this query
                 return fruit.updateOne(req.body)
             } else {
@@ -123,35 +129,12 @@ router.put("/:id", (req, res) => {
             }
         })
         .then(() => {
+            // console.log('returned from update promise', data)
             res.redirect(`/fruits/${id}`)
         })
         .catch(err => res.redirect(`/error?error=${err}`))
 })
 
-
-// DELETE request
-// destroy route -> finds and deletes a single resource(fruit)
-// here lies our old API delete route
-// router.delete("/:id", (req, res) => {
-//     // grab the id from the request
-//     const id = req.params.id
-//     // find and delete the fruit
-//     // Fruit.findByIdAndRemove(id)
-//     Fruit.findById(id)
-//         .then(fruit => {
-//             // we check for ownership against the logged in user's id
-//             if (fruit.owner == req.session.userId) {
-//                 // if successful, send a status and delete the fruit
-//                 res.sendStatus(204)
-//                 return fruit.deleteOne()
-//             } else {
-//                 // if they are not the user, send the unauthorized status
-//                 res.sendStatus(401)
-//             }
-//         })
-//         // send the error if not
-//         .catch(err => res.json(err))
-// })
 router.delete('/:id', (req, res) => {
     // get the fruit id
     const fruitId = req.params.id

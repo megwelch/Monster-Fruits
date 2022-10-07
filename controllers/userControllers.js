@@ -93,7 +93,8 @@ router.post('/login', async (req, res) => {
             }
         })
         .catch(err => {
-            // instead of res. json, w'll redirect to the error page ande we'll pass the error to a req.query, which is anything after a question mark
+            // instead of res.json, we'll redirect to the error page
+            // and we'll pass the error to a req.query, which is anything after a ?
             // res.json(err)
             res.redirect(`/error?error=${err}`)
         })
@@ -122,8 +123,6 @@ router.delete('/logout', (req, res) => {
         res.redirect('/')
     })
 })
-
-
 
 /////////////////////////////////////////
 // Export Router

@@ -23,10 +23,14 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <a class="nav-link text-light" href="/fruits">all the fruits</a>
-                    <a class="nav-link text-light" href="/fruits/new">New Fruit</a>
-                    <a class="nav-link text-light" href="/users/signup">Sign Up</a>
-                    <a class="nav-link text-light" href="/users/login">Log In</a>
-                    <a class="nav-link text-light" href="/users/logout">Log Out</a>
+                    {% if loggedIn %}
+                        <a class="nav-link text-light" href="/fruits/new">New Fruit</a>
+                        <a class="nav-link text-light" href="/users/logout">Log Out</a>
+
+                    {% else %}
+                        <a class="nav-link text-light" href="/users/signup">Sign Up</a>
+                        <a class="nav-link text-light" href="/users/login">Log In</a>
+                    {% endif%}
                 </div>
             </div>
         </nav>

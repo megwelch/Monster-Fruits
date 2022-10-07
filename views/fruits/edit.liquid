@@ -2,34 +2,43 @@
 {% block content %}
 
     <div class="container-sm">
+        {%- comment -%} change the action {%- endcomment -%}
+        {%- comment -%} add values to input fields {%- endcomment -%}
+        {%- comment -%} add a back button {%- endcomment -%}
         <form action="/fruits/{{fruit.id}}?_method=PUT" method="POST">
             <fieldset>
                 <legend>Edit {{fruit.name}}</legend>
                 <label class="form-label">Name: </label>
-                <input 
-                    class="form-control" 
-                    type="text" 
-                    name="name" 
-                    placeholder="name of the fruit"
-                    value="{{fruit.name}}">
+                <input
+                    class="form-control"
+                    type="text"
+                    name="name"
+                    placeholder="enter the name of the fruit"
+                    value="{{ fruit.name }}"
+                >
                 <label class="form-label">Color: </label>
-                <input 
-                    class="form-control" 
-                    type="text" 
-                    name="color" 
+                <input
+                    class="form-control"
+                    type="color"
+                    name="color"
                     placeholder="what color is the fruit?"
-                    value="{{ fruit.color }}">
+                    value="{{ fruit.color }}"
+                >
                 <label class="form-label">Ready To Eat: </label>
-                <input 
-                    class="form-check-input" 
-                    type="checkbox" 
+                <input
+                    class="form-check-input"
+                    type="checkbox"
                     name="readyToEat"
                     {% if fruit.readyToEat %}
                         checked
                     {% endif %}
-                    >
+                >
             </fieldset>
-            <input type="submit" value="Edit {{fruit.name}}" class="btn btn-success">
+            <input
+                class="btn btn-success"
+                type="submit"
+                value="Edit {{fruit.name}}"
+            >
         </form>
     </div>
 

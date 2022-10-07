@@ -1,25 +1,35 @@
 {% layout 'layout.liquid' %}
 {% block content %}
-    <div>
-        <h2 class="display-6">All Fruits</h2>
-        <div class="row">
-            {% for fruit in fruits %}
-                <div class="card">
-                    <h5 class="card-header">{{fruit.name}}</h5>
-                    <div class="card-body"></div>
-                        <h5 class="card-title">
-                            {% if fruit.readyToEat %}
-                                Ripe
-                            {% else %}
-                                Not Ripe
-                            {% endif %}
-                        </h5>
-                        <p class="card-text">The color of this {{fruit.name}} is {{fruit.color}}</p>
-                        <a class="btn btn-info" href="/fruits/{{fruit.id}}">
-                            View {{fruit.name}}
-                        </a>
-                </div>
-            {% endfor %}
+    {% if fruits.length > 0%}
+        <div>
+            <h2 class="display-6">All Fruits</h2>
+            <div class="row">
+                {% for fruit in fruits %}
+                    <div class="card" style="width: 18rem;">
+                        <h5 class="card-header">{{fruit.name}}</h5>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if fruit.readyToEat %}
+                                    Ripe
+                                {% else %}
+                                    Not Ripe
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">The color of this {{fruit.name}} is {{fruit.color}}</p>
+                            <div class="colorBox" style="background-color: {{fruit.color}}">
+
+                            </div>
+                            <a class="btn btn-info" href="/fruits/{{fruit.id}}">
+                                View {{fruit.name}}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div>
+            <h2 class="display-6">No fruits yet... time to add some!</h2>
+        </div>
+    {% endif %}
 {% endblock %}
