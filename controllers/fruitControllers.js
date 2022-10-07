@@ -31,7 +31,7 @@ router.get("/", (req, res) => {
             // here, we're going to render a page, but we can also send data that we got from the database to that liquid page for rendering
             res.render('fruits/index', { fruits, username, loggedIn, userId })
         })
-        .catch(err => console.log(err))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 // GET for new fruit
@@ -64,7 +64,7 @@ router.post("/", (req, res) => {
             // res.status(201).json({ fruit: fruit.toObject() })
             res.redirect('/fruits')
         })
-        .catch(error => console.log(error))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 // GET request
@@ -83,15 +83,26 @@ router.get('/mine', (req, res) => {
             res.render('fruits/index', { fruits, username, loggedIn, userId })
         })
     // or throw an error if there is one
-        .catch(error => res.json(error))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 // GET request to show the update page
 router.get("/edit/:id", (req, res) => {
-    // const username = req.session.username
-    // const loggedIn = req.session.loggedIn
-    // const userId = req.session.userId
-    res.send('edit page')
+    const username = req.session.username
+    const loggedIn = req.session.loggedIn
+    const userId = req.session.userId
+
+    const fruitId = req.params.id
+    Fruit.findById(fruitId)
+        // render the edit form if there is a fruit
+        // redirect if there isn't
+        .then(fruit => {
+            res.render('fruits/edit', {fruit, username, loggedIn, userId})
+        })
+        .catch(err => {
+            res.redirect(`/error?error=${err}`)
+        })
+    // res.send('edit page')
 })
 
 // PUT request
@@ -99,17 +110,24 @@ router.get("/edit/:id", (req, res) => {
 router.put("/:id", (req, res) => {
     // console.log("I hit the update route", req.params.id)
     const id = req.params.id
+    req.body.readyToEat = req.body.readyToEat === 'on' ? true : false
     Fruit.findById(id)
         .then(fruit => {
             if (fruit.owner == req.session.userId) {
-                res.sendStatus(204)
+                // res.sendStatus(204)
+                // return fruit.updateOne(req.body)
+                // must return the results of this query
                 return fruit.updateOne(req.body)
             } else {
                 res.sendStatus(401)
             }
         })
-        .catch(error => res.json(error))
+        .then(() => {
+            res.redirect(`/fruits/${id}`)
+        })
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
+
 
 // DELETE request
 // destroy route -> finds and deletes a single resource(fruit)
@@ -144,8 +162,8 @@ router.delete('/:id', (req, res) => {
             // if the delete is successful, send the user back to the index page
             res.redirect('/fruits')
         })
-        .catch(error => {
-            res.json({ error })
+        .catch(err => {
+            res.redirect(`/error?error=${err}`)
         })
 })
 
@@ -168,7 +186,7 @@ router.get("/:id", (req, res) => {
             // res.json({ fruit: fruit })
             res.render('fruits/show', { fruit, username, loggedIn, userId })
         })
-        .catch(err => console.log(err))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 

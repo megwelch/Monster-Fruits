@@ -11,6 +11,7 @@ const FruitRouter = require('./controllers/fruitControllers')
 const UserRouter = require('./controllers/userControllers')
 const CommentRouter = require('./controllers/commentControllers')
 const middleware = require('./utils/middleware')
+const e = require("express")
 
 /////////////////////////////////////////////
 // Create Our Express Application Object
@@ -32,6 +33,11 @@ app.get("/", (req, res) => {
     // res.send("Your server is running, better go out and catch it")
     // you can also send html as a string from res.send
     // res.send("<small style='color: red'>Your server is running, better go out and catch it</small>")
+    if (req.session.loggedIn){
+        res.redirect('/fruits')
+    } else {
+        res.render('index.liquid')
+    }
     res.render('index.liquid')
 })
 
@@ -44,6 +50,21 @@ app.get("/", (req, res) => {
 app.use('/fruits', FruitRouter)
 app.use('/comments', CommentRouter)
 app.use('/users', UserRouter)
+
+// this renders an error page, gets the error from a url request query
+app.get('/error', (req, res) => {
+    // get session variables
+    const {username, loggedIn, userId} = req.session
+    const error = req.query.error || 'This page does not exist'
+
+    res.render('error.liquid', {error, username, loggedIn, userId})
+})
+
+// this is a catchall route that will redirect to the error page for anything that doesn't satisfy a controller
+// * means anything... this has to be at the bottom (if at the top would be satisfied every time)
+app.all('*', (req, res) => {
+    res.redirect('/error')
+})
 
 /////////////////////////////////////////////
 // Server Listener
